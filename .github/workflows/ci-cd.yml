@@ -1,0 +1,81 @@
+name: CI/CD Pipeline — DecodeLabs Project 3
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build Stage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Verify Project Files
+        run: |
+          echo "✅ Build Stage Started"
+          echo "📁 Checking project files..."
+          ls -la
+          echo "✅ Build Stage Passed!"
+
+  test:
+    name: Test Stage
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Validate HTML File Exists
+        run: |
+          echo "🧪 Test Stage Started"
+          if [ -f "index.html" ]; then
+            echo "✅ index.html found!"
+          else
+            echo "❌ index.html missing!"
+            exit 1
+          fi
+
+      - name: Validate CSS File Exists
+        run: |
+          if [ -f "style.css" ]; then
+            echo "✅ style.css found!"
+          else
+            echo "❌ style.css missing!"
+            exit 1
+          fi
+
+      - name: Validate Workflow File Exists
+        run: |
+          if [ -f ".github/workflows/ci-cd.yml" ]; then
+            echo "✅ Workflow file found!"
+          else
+            echo "❌ Workflow file missing!"
+            exit 1
+          fi
+          echo "✅ All Tests Passed!"
+
+  deploy:
+    name: Deploy Stage
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+
+      - name: Deployment Success
+        run: |
+          echo "🚀 Deploy Stage Started"
+          echo "✅ Successfully deployed to GitHub Pages!"
+          echo "🌐 Live at: https://Abhinav-lucky.github.io/Task-3-Abhinav_Marrela"
