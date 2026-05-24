@@ -1,4 +1,4 @@
-name: CI/CD Pipeline — DecodeLabs Project 3
+name: CI/CD Pipeline - DecodeLabs Project 3
 
 on:
   push:
@@ -18,10 +18,10 @@ jobs:
 
       - name: Verify Project Files
         run: |
-          echo "✅ Build Stage Started"
-          echo "📁 Checking project files..."
+          echo "Build Stage Started"
+          echo "Checking project files..."
           ls -la
-          echo "✅ Build Stage Passed!"
+          echo "Build Stage Passed!"
 
   test:
     name: Test Stage
@@ -33,34 +33,25 @@ jobs:
 
       - name: Validate HTML File Exists
         run: |
-          echo "🧪 Test Stage Started"
+          echo "Test Stage Started"
           if [ -f "index.html" ]; then
-            echo "✅ index.html found!"
+            echo "index.html found!"
           else
-            echo "❌ index.html missing!"
+            echo "index.html missing!"
             exit 1
           fi
 
       - name: Validate CSS File Exists
         run: |
           if [ -f "style.css" ]; then
-            echo "✅ style.css found!"
+            echo "style.css found!"
           else
-            echo "❌ style.css missing!"
+            echo "style.css missing!"
             exit 1
           fi
+          echo "All Tests Passed!"
 
-      - name: Validate Workflow File Exists
-        run: |
-          if [ -f ".github/workflows/ci-cd.yml" ]; then
-            echo "✅ Workflow file found!"
-          else
-            echo "❌ Workflow file missing!"
-            exit 1
-          fi
-          echo "✅ All Tests Passed!"
-
-deploy:
+  deploy:
     name: Deploy Stage
     runs-on: ubuntu-latest
     needs: test
